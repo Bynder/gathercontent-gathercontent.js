@@ -33,12 +33,15 @@
     "*.{js,ts,css,md}": "prettier --write"
   },
   "author": "GatherContent",
-  "contributors": [{
-    "name": "Kyle Harper",
-    "email": "kyle@gathercontent.com"
-  }],
+  "contributors": [
+    {
+      "name": "Kyle Harper",
+      "email": "kyle@gathercontent.com"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/gathercontent/gathercontent.js"
-  }
+  },
+  "version": "0.0.1"
 }
