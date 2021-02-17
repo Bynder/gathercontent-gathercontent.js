@@ -25,7 +25,7 @@ export async function getItems(
   return await Promise.all(
     [
       ...firstPageResponse.data,
-      ...otherPageResponses.reduce((acc, val) => [...acc, ...val.data], []),
+      ...otherPageResponses.reduce((acc, val) => [...acc, ...val], []),
     ].map(async i => {
       const itemRes = await getItem(i.id, credentials)
 
