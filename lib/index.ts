@@ -12,7 +12,7 @@ export async function getProject(projectId: number, credentials: credentialsInte
 
     return {
         folders: values[0].data,
-        items: values[1].data,
+        items: values[1],
         templates: values[2].data,
     };
 }

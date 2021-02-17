@@ -1,4 +1,5 @@
 import axios from 'axios';
+import camelcaseKeys from 'camelcase-keys';
 
 export interface credentialsInterface {
   email: string,
@@ -15,5 +16,8 @@ export async function get(url: string, credentials: credentialsInterface) {
     },
   });
 
-  return response.data
+  return camelcaseKeys(response.data, {
+    deep: true,
+    stopPaths: ['data.content'],
+  });
 }

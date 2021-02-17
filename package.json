@@ -23,7 +23,8 @@
     "prepublish": "tsc"
   },
   "dependencies": {
-    "axios": "^0.21.1"
+    "axios": "^0.21.1",
+    "camelcase-keys": "^6.2.2"
   },
   "husky": {
     "hooks": {
