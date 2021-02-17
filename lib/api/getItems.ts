@@ -9,7 +9,7 @@ export async function getItems(
   const firstPageResponse = await get(
     `projects/${projectId}/items`,
     credentials
-  )
+  );
   const unFetchedPageCount = [
     ...new Array(firstPageResponse.pagination.totalPages - 1),
   ]
