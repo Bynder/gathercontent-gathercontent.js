@@ -9,15 +9,16 @@ export async function getItems(
   const firstPageResponse = await get(
     `projects/${projectId}/items`,
     credentials
-  );
-
+  )
   const unFetchedPageCount = [
     ...new Array(firstPageResponse.pagination.totalPages - 1),
-  ];
-  
+  ]
   const promises = unFetchedPageCount.map((p, i) => async () => {
-    const { data } = await get(`projects/${projectId}/items?page=${i + 2}`, credentials);
-    return data;
+    const { data } = await get(
+      `projects/${projectId}/items?page=${i + 2}`,
+      credentials
+    )
+    return data
   })
   const otherPageResponses = await Promise.all(promises.map(p => p()))
 
@@ -28,12 +29,18 @@ export async function getItems(
     ].map(async i => {
       const itemRes = await getItem(i.id, credentials)
 
-      const fields = itemRes.structure.groups.reduce((acc: any, group: any) => [...acc, ...group.fields], [])
+      const fields = itemRes.structure.groups.reduce(
+        (acc: any, group: any) => [...acc, ...group.fields],
+        []
+      )
 
-      const content = fields.reduce((acc: any, field: any) => ({
-        ...acc,
-        [field.label]: itemRes.content[field.uuid],
-      }), {})
+      const content = fields.reduce(
+        (acc: any, field: any) => ({
+          ...acc,
+          [field.label]: itemRes.content[field.uuid],
+        }),
+        {}
+      )
 
       return {
         ...i,
