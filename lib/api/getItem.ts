@@ -5,5 +5,5 @@ export async function getItem(
   credentials: CredentialsInterface
 ) {
   const { data } = await get(`items/${itemId}?include=structure`, credentials)
-  return data;
+  return data
 }

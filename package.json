@@ -42,10 +42,8 @@
     }
   },
   "lint-staged": {
-    "*.{js,ts,css,md}": [
-      "npm run format",
-      "npm run lint"
-    ]
+    "*.{js,jsx,ts,tsx}": "eslint --cache --fix",
+    "*.{js,jsx,ts,tsx,json,md}": "prettier --write"
   },
   "author": "GatherContent",
   "contributors": [

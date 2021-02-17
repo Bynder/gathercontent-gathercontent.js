@@ -12,7 +12,7 @@ export async function getItems(
   );
   const unFetchedPageCount = [
     ...new Array(firstPageResponse.pagination.totalPages - 1),
-  ]
+  ];
   const promises = unFetchedPageCount.map((p, i) => async () => {
     const { data } = await get(`projects/${projectId}/items?page=${i + 2}`, credentials);
     return data;

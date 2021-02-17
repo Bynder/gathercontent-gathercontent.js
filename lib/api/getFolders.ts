@@ -5,5 +5,5 @@ export async function getFolders(
   credentials: CredentialsInterface
 ) {
   const { data } = await get(`projects/${projectId}/folders`, credentials)
-  return data;
+  return data
 }
