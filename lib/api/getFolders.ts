@@ -1,5 +1,9 @@
-import { credentialsInterface, get } from '../utils/get';
+import { CredentialsInterface, get } from "../utils/get"
 
-export async function getFolders(projectId: number, credentials: credentialsInterface) {
-    return await get(`projects/${projectId}/folders`, credentials);
+export async function getFolders(
+  projectId: number,
+  credentials: CredentialsInterface
+) {
+  const { data } = await get(`projects/${projectId}/folders`, credentials)
+  return data;
 }
