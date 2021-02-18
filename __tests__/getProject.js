@@ -4,8 +4,8 @@ import { getProjectData } from "../lib"
 test("getting data for a project", async () => {
   const project = {
     id: 1,
-    statuses: { data: [] }
-  };
+    statuses: { data: [] },
+  }
 
   const itemMock = {
     id: 1,
