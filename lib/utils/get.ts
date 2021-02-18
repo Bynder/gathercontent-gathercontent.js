@@ -6,7 +6,11 @@ export interface CredentialsInterface {
   apiKey: string
 }
 
-export async function get(url: string, credentials: CredentialsInterface) {
+export async function get(
+  url: string,
+  credentials: CredentialsInterface,
+  headers: object = {}
+) {
   const base64credentials = Buffer.from(
     `${credentials.email}:${credentials.apiKey}`
   ).toString("base64")
@@ -15,6 +19,7 @@ export async function get(url: string, credentials: CredentialsInterface) {
     headers: {
       Accept: "application/vnd.gathercontent.v2+json",
       Authorization: `Basic ${base64credentials}`,
+      ...headers,
     },
   })
 

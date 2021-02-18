@@ -1,23 +1,49 @@
 import nock from "nock"
-import { getProject } from "../lib"
+import { getProjectData } from "../lib"
 
 test("getting data for a project", async () => {
-  const projectId = 1
+  const project = {
+    id: 1,
+    statuses: { data: [] }
+  };
+
   const itemMock = {
     id: 1,
+    name: "test item",
+    content: {
+      "field-1-uuid": "hello world",
+      "field-2-uuid": "hello world again",
+    },
     structure: {
       groups: [
         {
-          fields: [],
+          name: "Meta data",
+          fields: [
+            {
+              uuid: "field-1-uuid",
+              label: "description",
+            },
+          ],
+        },
+        {
+          name: "Meta data",
+          fields: [
+            {
+              uuid: "field-2-uuid",
+              label: "description",
+            },
+          ],
         },
       ],
     },
   }
   const itemMock2 = {
     id: 2,
+    name: "test item 2",
     structure: {
       groups: [
         {
+          name: "Content",
           fields: [],
         },
       ],
@@ -25,11 +51,17 @@ test("getting data for a project", async () => {
   }
 
   nock("https://api.gathercontent.com")
-    .get(`/projects/${projectId}/folders`)
-    .reply(200, { data: [] })
+    .get(`/projects/${project.id}`)
+    .reply(200, {
+      data: project,
+    })
 
   nock("https://api.gathercontent.com")
-    .get(`/projects/${projectId}/items`)
+    .get(`/projects/${project.id}/folders`)
+    .reply(200, { data: [{ name: "Project folder" }] })
+
+  nock("https://api.gathercontent.com")
+    .get(`/projects/${project.id}/items?page=1`)
     .reply(200, {
       data: [itemMock],
       pagination: {
@@ -39,7 +71,7 @@ test("getting data for a project", async () => {
     })
 
   nock("https://api.gathercontent.com")
-    .get(`/projects/${projectId}/items?page=2`)
+    .get(`/projects/${project.id}/items?page=2`)
     .reply(200, {
       data: [itemMock2],
       pagination: {
@@ -49,7 +81,7 @@ test("getting data for a project", async () => {
     })
 
   nock("https://api.gathercontent.com")
-    .get(`/projects/${projectId}/templates`)
+    .get(`/projects/${project.id}/templates`)
     .reply(200, { data: [] })
 
   nock("https://api.gathercontent.com")
@@ -65,21 +97,33 @@ test("getting data for a project", async () => {
     })
 
   const expected = {
-    folders: [],
+    project,
+    folders: [{ name: "Project folder", slug: "projectFolder" }],
     templates: [],
     items: [
       {
         ...itemMock,
-        content: {},
+        slug: "testItem",
+        itemContent: {
+          metaData: {
+            description: "hello world",
+          },
+          metaData2: {
+            description: "hello world again",
+          },
+        },
       },
       {
         ...itemMock2,
-        content: {},
+        slug: "testItem2",
+        itemContent: {
+          content: {},
+        },
       },
     ],
   }
 
-  const result = await getProject(1, {
+  const result = await getProjectData(1, {
     email: "hello@world.com",
     apiKey: "apiKey",
   })

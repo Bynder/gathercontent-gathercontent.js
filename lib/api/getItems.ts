@@ -1,23 +1,24 @@
 import camelcaseKeys from "camelcase-keys"
 import { CredentialsInterface, get } from "../utils/get"
 import { getItem } from "./getItem"
+import { createSlug } from "../utils/createSlug"
 
 export async function getItems(
   projectId: number,
-  credentials: CredentialsInterface
+  credentials: CredentialsInterface,
+  requiredStatuses: string
 ) {
-  const firstPageResponse = await get(
-    `projects/${projectId}/items`,
-    credentials
-  )
+  const buildAPIUrl = (page: number) =>
+    requiredStatuses
+      ? `projects/${projectId}/items?status_id=${requiredStatuses}&page=${page}`
+      : `projects/${projectId}/items?page=${page}`
+
+  const firstPageResponse = await get(buildAPIUrl(1), credentials)
   const unFetchedPageCount = [
     ...new Array(firstPageResponse.pagination.totalPages - 1),
   ]
-  const promises = unFetchedPageCount.map((p, i) => async () => {
-    const { data } = await get(
-      `projects/${projectId}/items?page=${i + 2}`,
-      credentials
-    )
+  const promises = unFetchedPageCount.map((p, i: number) => async () => {
+    const { data } = await get(buildAPIUrl(i + 2), credentials)
     return data
   })
   const otherPageResponses = await Promise.all(promises.map(p => p()))
@@ -29,15 +30,21 @@ export async function getItems(
     ].map(async i => {
       const itemRes = await getItem(i.id, credentials)
 
-      const fields = itemRes.structure.groups.reduce(
-        (acc: any, group: any) => [...acc, ...group.fields],
-        []
-      )
+      const reduceFields = (group: any) =>
+        group.fields.reduce(
+          (acc: any, field: any) => ({
+            ...acc,
+            [createSlug(field.label, acc)]: itemRes.content[field.uuid],
+          }),
+          {}
+        )
 
-      const content = fields.reduce(
-        (acc: any, field: any) => ({
+      const itemContent = itemRes.structure.groups.reduce(
+        (acc: any, group: any) => ({
           ...acc,
-          [field.label]: itemRes.content[field.uuid],
+          [createSlug(group.name, acc)]: camelcaseKeys(reduceFields(group), {
+            deep: true,
+          }),
         }),
         {}
       )
@@ -45,7 +52,8 @@ export async function getItems(
       return {
         ...i,
         ...itemRes,
-        content: camelcaseKeys(content),
+        slug: createSlug(itemRes.name),
+        itemContent,
       }
     })
   )
