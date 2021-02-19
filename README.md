@@ -12,7 +12,7 @@ npm install gathercontent.js
 
 ## Usage
 
-Content is written on items in GatherContent. Items are stored in projects, so the main function in this library is called `getProjectData`;
+Content is written on items in GatherContent. Items are stored in projects, so the main function in this library is called `getProjectData`.
 
 ```javascript
 import { getProjectData } from "gathercontent.js"
@@ -26,7 +26,7 @@ const credentials = {
 const project = getProjectData(projectId, credentials)
 ```
 
-`getProjectData` returns key pieces of project data from our [API](https://docs.gathercontent.com/reference);
+`getProjectData` returns key pieces of project data from the GatherContent [API](https://docs.gathercontent.com/reference).
 
 ```
 {
@@ -39,7 +39,7 @@ const project = getProjectData(projectId, credentials)
 
 ## Data structure
 
-You can understand the structure of the data by reading our API docs;
+You can understand the structure of the data by reading the API docs;
 
 - [project](https://docs.gathercontent.com/v0.5/reference#get-project-by-id)
 - [templates](https://docs.gathercontent.com/reference#templates)
