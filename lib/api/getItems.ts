@@ -6,12 +6,8 @@ import { createSlug } from "../utils/createSlug"
 export async function getItems(
   projectId: number,
   credentials: CredentialsInterface,
-  requiredStatuses: string
 ) {
-  const buildAPIUrl = (page: number) =>
-    requiredStatuses
-      ? `projects/${projectId}/items?status_id=${requiredStatuses}&page=${page}`
-      : `projects/${projectId}/items?page=${page}`
+  const buildAPIUrl = (page: number) => `projects/${projectId}/items?page=${page}`
 
   const firstPageResponse = await get(buildAPIUrl(1), credentials)
   const unFetchedPageCount = [

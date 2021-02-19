@@ -7,12 +7,11 @@ import { getProject } from "./api/getProject"
 export async function getProjectData(
   projectId: number,
   credentials: CredentialsInterface,
-  requiredStatuses: string
 ) {
   const values = await Promise.all([
     getProject(projectId, credentials),
     getFolders(projectId, credentials),
-    getItems(projectId, credentials, requiredStatuses),
+    getItems(projectId, credentials),
     getTemplates(projectId, credentials),
   ])
 

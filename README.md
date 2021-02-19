@@ -3,3 +3,9 @@
 # gathercontent.js
 
 A Javascript helper library for GatherContent.
+
+## Usage
+
+```javascript
+
+```
