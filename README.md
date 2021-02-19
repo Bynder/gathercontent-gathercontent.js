@@ -70,11 +70,10 @@ This library appends slugs where helpful by converting the name. Items, template
 ```javascript
 const item = {
   name: "Hello [world]",
-  slug: "helloWorld", // the item name is converted
+  slug: "helloWorld", // item name is converted
   itemContent: {
-    metaData: {
-      // the name of the field group is converted
-      pageHeading: "Page heading", // the name of the field is converted
+    metaData: { // field group name is converted
+      pageHeading: "Page heading", // field name is converted
     },
   },
 }
@@ -86,7 +85,7 @@ Duplicate names are automatically handled. For example if you have a group of fi
 
 ## Casing
 
-Our api uses snake case but this library converts the data to camelcase. Here's an example;
+Our api uses snake case but this library converts the data to camelcase.
 
 ```javascript
 const itemBefore = {
