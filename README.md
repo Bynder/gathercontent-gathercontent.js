@@ -12,7 +12,7 @@ npm install gathercontent.js
 
 ## Usage
 
-Content is written on items in GatherContent. Items are stored in projects, so the main function in this library is called `getProjectData`;
+Content is written on items in GatherContent. Items are stored in projects, so the main function in this library is called `getProjectData`.
 
 ```javascript
 import { getProjectData } from "gathercontent.js"
@@ -26,7 +26,7 @@ const credentials = {
 const project = getProjectData(projectId, credentials)
 ```
 
-`getProjectData` returns key pieces of project data from our [API](https://docs.gathercontent.com/reference);
+`getProjectData` returns key pieces of project data from the GatherContent [API](https://docs.gathercontent.com/reference).
 
 ```
 {
@@ -39,7 +39,7 @@ const project = getProjectData(projectId, credentials)
 
 ## Data structure
 
-You can understand the structure of the data by reading our API docs;
+You can understand the structure of the data by reading the API docs;
 
 - [project](https://docs.gathercontent.com/v0.5/reference#get-project-by-id)
 - [templates](https://docs.gathercontent.com/reference#templates)
@@ -65,28 +65,27 @@ const item = {
 
 ## Slugs
 
-This library appends slugs where helpful by converting the name. Items, templates, folders and workflow statuses all have slugs added. For content, we use the slug to help key the fields. Here's an example;
+This library appends slugs where helpful by converting the name. Items, templates, folders and workflow statuses all have slugs added. For content, we use the slug to help key the fields.
 
 ```javascript
 const item = {
   name: "Hello [world]",
-  slug: "helloWorld", // the item name is converted
+  slug: "helloWorld", // item name is converted
   itemContent: {
-    metaData: {
-      // the name of the field group is converted
-      pageHeading: "Page heading", // the name of the field is converted
+    metaData: { // field group name is converted
+      pageHeading: "Page heading", // field name is converted
     },
   },
 }
 ```
 
-Using the name for the conversion is logical but comes with a serious downside, duplicate names.
+Using the name for slugs is logical but comes with a serious downside, duplicate names.
 
 Duplicate names are automatically handled. For example if you have a group of fields with duplicate names the conversion will append a position to the end of the key. E.g. `fieldName2`.
 
 ## Casing
 
-Our api uses snake case but this library converts the data to camelcase. Here's an example;
+Our api uses snake case but this library converts the data to camelcase.
 
 ```javascript
 const itemBefore = {
