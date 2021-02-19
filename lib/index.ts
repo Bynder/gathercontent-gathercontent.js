@@ -6,7 +6,7 @@ import { getProject } from "./api/getProject"
 
 export async function getProjectData(
   projectId: number,
-  credentials: CredentialsInterface,
+  credentials: CredentialsInterface
 ) {
   const values = await Promise.all([
     getProject(projectId, credentials),
