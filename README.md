@@ -79,7 +79,7 @@ const item = {
 }
 ```
 
-Using the name for the conversion is logical but comes with a serious downside, duplicate names.
+Using the name for slugs is logical but comes with a serious downside, duplicate names.
 
 Duplicate names are automatically handled. For example if you have a group of fields with duplicate names the conversion will append a position to the end of the key. E.g. `fieldName2`.
 
