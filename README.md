@@ -65,7 +65,7 @@ const item = {
 
 ## Slugs
 
-This library appends slugs where helpful by converting the name. Items, templates, folders and workflow statuses all have slugs added. For content, we use the slug to help key the fields. Here's an example;
+This library appends slugs where helpful by converting the name. Items, templates, folders and workflow statuses all have slugs added. For content, we use the slug to help key the fields.
 
 ```javascript
 const item = {
