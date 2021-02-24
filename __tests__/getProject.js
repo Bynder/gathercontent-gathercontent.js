@@ -9,7 +9,7 @@ test("getting data for a project", async () => {
 
   const itemMock = {
     id: 1,
-    name: "test item",
+    name: "test / item",
     content: {
       "field-1-uuid": "hello world",
       "field-2-uuid": "hello world again",
@@ -98,12 +98,15 @@ test("getting data for a project", async () => {
 
   const expected = {
     project,
-    folders: [{ name: "Project folder", slug: "projectFolder" }],
+    folders: [{
+      name: "Project folder",
+      slug: "project-folder"
+    }],
     templates: [],
     items: [
       {
         ...itemMock,
-        slug: "testItem",
+        slug: "test-item",
         itemContent: {
           metaData: {
             description: "hello world",
@@ -115,7 +118,7 @@ test("getting data for a project", async () => {
       },
       {
         ...itemMock2,
-        slug: "testItem2",
+        slug: "test-item-2",
         itemContent: {
           content: {},
         },
