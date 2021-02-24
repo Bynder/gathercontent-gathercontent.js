@@ -72,7 +72,8 @@ const item = {
   name: "Hello [world]",
   slug: "helloWorld", // item name is converted
   itemContent: {
-    metaData: { // field group name is converted
+    metaData: {
+      // field group name is converted
       pageHeading: "Page heading", // field name is converted
     },
   },

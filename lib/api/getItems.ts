@@ -39,9 +39,12 @@ export async function getItems(
       const itemContent = itemRes.structure.groups.reduce(
         (acc: any, group: any) => ({
           ...acc,
-          [createSlug(group.name, acc, true)]: camelcaseKeys(reduceFields(group), {
-            deep: true,
-          }),
+          [createSlug(group.name, acc, true)]: camelcaseKeys(
+            reduceFields(group),
+            {
+              deep: true,
+            }
+          ),
         }),
         {}
       )

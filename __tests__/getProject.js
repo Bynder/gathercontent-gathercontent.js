@@ -98,10 +98,12 @@ test("getting data for a project", async () => {
 
   const expected = {
     project,
-    folders: [{
-      name: "Project folder",
-      slug: "project-folder"
-    }],
+    folders: [
+      {
+        name: "Project folder",
+        slug: "project-folder",
+      },
+    ],
     templates: [],
     items: [
       {
