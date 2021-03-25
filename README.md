@@ -112,7 +112,7 @@ npm run test
 
 When you are testing the use of `gathercontent.js` there are a number of helpers that can aid the mocking of `http` requests.
 
-You can find these in `__tests__/mocks/nocks`. We utilise the `nock` package to do this.
+You can find these in `__tests__/mocks/nocks`. We utilise the [nock](https://github.com/nock/nock) package to do this.
 
 Or if you wish you can also mock the implementation of functions like `getProjectData` so it can return a specific response for your testing needs.
 
