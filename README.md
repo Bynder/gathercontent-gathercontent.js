@@ -116,10 +116,9 @@ You can find these in `__tests__/mocks/nocks`. We utilise the `nock` package to 
 
 Or if you wish you can also mock the implementation of functions like `getProjectData` so it can return a specific response for your testing needs.
 
-
 ## Rate Limiting
 
-GatherContent implements [rate limiting](https://docs.gathercontent.com/reference#rate-limiting) (as many APIs do). 
+GatherContent implements [rate limiting](https://docs.gathercontent.com/reference#rate-limiting) (as many APIs do).
 This library implements a repeat and proactive rate limiting strategy, which should handle all your needs.
 
 ## Feedback
