@@ -70,7 +70,7 @@ This library appends slugs where helpful by converting the name. Items, template
 ```javascript
 const item = {
   name: "Hello [world]",
-  slug: "helloWorld", // item name is converted
+  slug: "hello-world", // item name is converted
   itemContent: {
     metaData: {
       // field group name is converted
@@ -80,13 +80,13 @@ const item = {
 }
 ```
 
-Using the name for slugs is logical but comes with a serious downside, duplicate names.
+Using the name for slugs is logical but comes with a downside, duplicate names.
 
 Duplicate names are automatically handled. For example if you have a group of fields with duplicate names the conversion will append a position to the end of the key. E.g. `fieldName2`.
 
 ## Casing
 
-Our api uses snake case but this library converts the data to camelcase.
+The GatherContent api uses snake case but this library converts the data to camelcase.
 
 ```javascript
 const itemBefore = {
@@ -101,6 +101,25 @@ const itemAfter = {
   folderUuid: "uuid",
 }
 ```
+
+## Testing
+
+To run the tests you can run;
+
+```cli
+npm run test
+```
+
+When you are testing the use of `gathercontent.js` there are a number of helpers that can aid the mocking of `http` requests.
+
+You can find these in `__tests__/mocks/nocks`. We utilise the [nock](https://github.com/nock/nock) package to do this.
+
+Or if you wish you can also mock the implementation of functions like `getProjectData` so it can return a specific response for your testing needs.
+
+## Rate Limiting
+
+GatherContent implements [rate limiting](https://docs.gathercontent.com/reference#rate-limiting) (as many APIs do).
+This library implements a repeat and proactive rate limiting strategy, which should handle all your needs.
 
 ## Feedback
 

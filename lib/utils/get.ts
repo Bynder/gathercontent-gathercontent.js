@@ -1,5 +1,7 @@
 import axios from "axios"
-import camelcaseKeys from "camelcase-keys"
+import * as rax from "retry-axios"
+import rateLimit from "axios-rate-limit"
+import { convertKeys } from "./convertKeys"
 
 export interface CredentialsInterface {
   email: string
@@ -15,7 +17,16 @@ export async function get(
     `${credentials.email}:${credentials.apiKey}`
   ).toString("base64")
 
-  const response = await axios.get(`https://api.gathercontent.com/${url}`, {
+  const axiosInstance = axios.create()
+  axiosInstance.defaults.raxConfig = {
+    instance: axiosInstance,
+  }
+  rax.attach(axiosInstance)
+  const http = rateLimit(axiosInstance, {
+    maxRequests: 250,
+    perMilliseconds: 15000,
+  })
+  const response = await http.get(`https://api.gathercontent.com/${url}`, {
     headers: {
       Accept: "application/vnd.gathercontent.v2+json",
       Authorization: `Basic ${base64credentials}`,
@@ -23,8 +34,5 @@ export async function get(
     },
   })
 
-  return camelcaseKeys(response.data, {
-    deep: true,
-    stopPaths: ["data.content"],
-  })
+  return convertKeys(response.data)
 }
