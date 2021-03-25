@@ -1,114 +1,68 @@
 import nock from "nock"
 import { getProjectData } from "../lib"
+import { createSlug } from "../lib/utils/createSlug"
+import { convertKeys } from "../lib/utils/convertKeys"
+import { omit } from "../lib/utils/omit"
+import { nockGetProject } from "./mocks/nocks/nockGetProject"
+import { nockGetItems } from "./mocks/nocks/nockGetItems"
+import { nockGetFolders } from "./mocks/nocks/nockGetFolders"
+import { nockGetItem } from "./mocks/nocks/nockGetItem"
+import { nockGetTemplates } from "./mocks/nocks/nockGetTemplates"
 
 test("getting data for a project", async () => {
-  const project = {
-    id: 1,
-    statuses: { data: [] },
-  }
+  const apiNock = nock(/gathercontent\.com/).persist()
+  const project = nockGetProject(apiNock)
+  const [page1Items, page2Items] = nockGetItems(apiNock, project)
+  const folders = nockGetFolders(apiNock, project)
+  const item1 = nockGetItem(apiNock, page1Items[0])
+  const item2 = nockGetItem(apiNock, page2Items[0])
+  const templates = nockGetTemplates(apiNock, project)
 
-  const itemMock = {
-    id: 1,
-    name: "test / item",
-    content: {
-      "field-1-uuid": "hello world",
-      "field-2-uuid": "hello world again",
-    },
-    structure: {
-      groups: [
-        {
-          name: "Meta data",
-          fields: [
-            {
-              uuid: "field-1-uuid",
-              label: "description",
-            },
-          ],
-        },
-        {
-          name: "Meta data",
-          fields: [
-            {
-              uuid: "field-2-uuid",
-              label: "description",
-            },
-          ],
-        },
-      ],
-    },
-  }
-  const itemMock2 = {
-    id: 2,
-    name: "test item 2",
-    structure: {
-      groups: [
-        {
-          name: "Content",
-          fields: [],
-        },
-      ],
-    },
-  }
+  const sanitisedFolder1 = omit(
+    ["parent_uuid", "folder_uuid"],
+    convertKeys(folders[0])
+  )
+  const sanitisedFolder2 = omit(
+    ["parent_uuid", "folder_uuid"],
+    convertKeys(folders[1])
+  )
 
-  nock("https://api.gathercontent.com")
-    .get(`/projects/${project.id}`)
-    .reply(200, {
-      data: project,
-    })
-
-  nock("https://api.gathercontent.com")
-    .get(`/projects/${project.id}/folders`)
-    .reply(200, { data: [{ name: "Project folder" }] })
-
-  nock("https://api.gathercontent.com")
-    .get(`/projects/${project.id}/items?page=1`)
-    .reply(200, {
-      data: [itemMock],
-      pagination: {
-        page: 1,
-        totalPages: 2,
-      },
-    })
-
-  nock("https://api.gathercontent.com")
-    .get(`/projects/${project.id}/items?page=2`)
-    .reply(200, {
-      data: [itemMock2],
-      pagination: {
-        page: 2,
-        totalPages: 2,
-      },
-    })
-
-  nock("https://api.gathercontent.com")
-    .get(`/projects/${project.id}/templates`)
-    .reply(200, { data: [] })
-
-  nock("https://api.gathercontent.com")
-    .get(`/items/1?include=structure`)
-    .reply(200, {
-      data: itemMock,
-    })
-
-  nock("https://api.gathercontent.com")
-    .get(`/items/2?include=structure`)
-    .reply(200, {
-      data: itemMock2,
-    })
+  const sanitisedItem1 = omit(["status_id", "template_id"], convertKeys(item1))
+  const sanitisedItem2 = omit(["status_id", "template_id"], convertKeys(item2))
 
   const expected = {
-    project,
+    project: {
+      ...project,
+      statuses: {
+        data: [
+          {
+            ...project.statuses.data[0],
+            slug: createSlug(project.statuses.data[0].name),
+          },
+        ],
+      },
+    },
     folders: [
       {
-        name: "Project folder",
-        slug: "project-folder",
+        ...sanitisedFolder1,
+        slug: createSlug(sanitisedFolder1.name),
+      },
+      {
+        ...sanitisedFolder2,
+        slug: createSlug(sanitisedFolder2.name),
+        parentUuid: sanitisedFolder1.uuid,
       },
     ],
-    templates: [],
+    templates: [
+      {
+        ...templates[0],
+        slug: createSlug(templates[0].name),
+      },
+    ],
     items: [
       {
-        ...itemMock,
-        slug: "test-item",
+        ...sanitisedItem1,
+        slug: createSlug(sanitisedItem1.name),
         itemContent: {
           metaData: {
             description: "hello world",
@@ -119,8 +73,8 @@ test("getting data for a project", async () => {
         },
       },
       {
-        ...itemMock2,
-        slug: "test-item-2",
+        ...sanitisedItem2,
+        slug: createSlug(sanitisedItem2.name),
         itemContent: {
           content: {},
         },
