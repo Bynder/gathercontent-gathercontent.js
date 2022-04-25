@@ -20,11 +20,12 @@ export async function get(
   const axiosInstance = axios.create()
   axiosInstance.defaults.raxConfig = {
     instance: axiosInstance,
+    retryDelay: 1000,
   }
   rax.attach(axiosInstance)
   const http = rateLimit(axiosInstance, {
     maxRequests: 250,
-    perMilliseconds: 15000,
+    perMilliseconds: 16000,
   })
   const response = await http.get(`https://api.gathercontent.com/${url}`, {
     headers: {
